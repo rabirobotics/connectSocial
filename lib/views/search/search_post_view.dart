@@ -17,7 +17,7 @@ class _SearchPostViewState extends State<SearchPostView> {
   String? user;
   @override
   void initState() {
-    // TODO: implement initState
+    _fetchUser();
     super.initState();
   }
 
