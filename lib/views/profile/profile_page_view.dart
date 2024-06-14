@@ -164,7 +164,7 @@ class _ProfilePageState extends State<ProfilePage> {
       DocumentSnapshot userSnapshot =
           await db.collection("users").doc(widget.userId).get();
       User user = await User.fromFirestore(userSnapshot);
-      print("USer FOllowers ${user.followers}");
+      print("User FOllowers ${user.followers}");
       if (user.followers.any((element) => element == auth.user!.uid)) {
         print(
             "isfollowing${user.followers.any((element) => element == auth.user!.uid)}");
@@ -186,16 +186,21 @@ class _ProfilePageState extends State<ProfilePage> {
         await dataService.unfollowUser(auth.user!.uid, widget.userId!).then(
               (value) => setState(() {
                 _isFollowing = false;
+                userProfile!.followers.length -= 1;
                 _isFollowStatusChanging = false;
               }),
             );
       } else {
-        await dataService.followUser(auth.user!.uid, widget.userId!).then(
-              (_) => setState(() {
-                _isFollowing = true;
-                _isFollowStatusChanging = false;
-              }),
-            );
+        await dataService.followUser(auth.user!.uid, widget.userId!).then((_) {
+          print("Followers${userProfile!.followers.length}");
+          setState(() {
+            _isFollowing = true;
+            userProfile!
+                .copyWith(followers: userProfile!.followers + [auth.user!.uid]);
+            _isFollowStatusChanging = false;
+          });
+          print("Followers${userProfile!.followers.length}");
+        });
       }
     } catch (error) {
       setState(() {
@@ -206,10 +211,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
+    // final mediaQuery = MediaQuery.of(context);
     final user = Provider.of<AuthService>(context);
-    print("User Id form here: ${user.user!.uid}");
-    print(" Id form here: ${widget.userId}");
+    // print("User Id form here: ${user.user!.uid}");
+    // print(" Id form here: ${widget.userId}");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: indigo,
