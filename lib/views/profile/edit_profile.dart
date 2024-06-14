@@ -171,7 +171,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       title: Text(label),
       subtitle: TextFormField(
         controller: controller,
-        readOnly: field == null,
+        readOnly: true,
         maxLines: label == "Bio" ? 3 : 1,
         maxLength: label == "Bio"
             ? 100
